@@ -17,9 +17,8 @@ int main(int argc, char *argv[])
 {
    struct Myargs args;
 
-    if (argc != 8)
+    if (argc != 9)
         return (1);
-    else:
+    else
         parse_shit(argv, &args);
-
 }
