@@ -15,12 +15,11 @@
 
 int main(int argc, char *argv[])
 {
-    char *list;
+   struct Myargs args;
 
-    list = argv[1]
     if (argc != 8)
         return (1);
     else:
-        parse_shit(list);
+        parse_shit(argv, &args);
 
 }
