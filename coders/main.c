@@ -15,9 +15,12 @@
 
 int main(int argc, char *argv[])
 {
+    char *list;
+
+    list = argv[1]
     if (argc != 8)
         return (1);
-    else
+    else:
         parse_shit(list);
 
 }
