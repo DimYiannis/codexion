@@ -16,6 +16,14 @@ void simulation(Myargs *args)
         coders[i].id = i + 1;
         coders[i].time_to_burnout = args->time_to_burnout;
         pthread_create(&threads[i], NULL, &threadFunc, (void*)&coders[i]);
-        pthread_join(threads[i], NULL);
+        i++;
     }
+    i = 0;
+    while (i < args->num_of_coders)
+    {
+        pthread_join(threads[i], NULL);
+        i++;
+    }
+    free(threads);
+    free(coders);
 }
