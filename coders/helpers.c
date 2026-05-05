@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:07:38 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/04 17:07:39 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/05 09:23:40 by yiannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,20 @@ char	*ft_strcpy(char *dest, const char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
+}
+
+int	is_valid_arg(char *s)
+{
+	int	i;
+
+	if (!s || s[0] == '\0')
+		return (0);
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] < '0' || s[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
 }
