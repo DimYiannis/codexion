@@ -6,7 +6,7 @@
 /*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 11:02:50 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/05 09:17:54 by yiannis          ###   ########.fr       */
+/*   Updated: 2026/05/05 09:36:16 by yiannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
    Myargs args;
 
     if (argc != 9)
-        return (1);
-    else
-        parse_shit(argv, &args);
+        return (fprintf(stderr, "wrong number of arguments"), 1);
+    parse_shit(argv, &args);
+    return (0);
 }
