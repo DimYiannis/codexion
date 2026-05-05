@@ -6,7 +6,7 @@
 /*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 11:02:34 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/05 09:23:48 by yiannis          ###   ########.fr       */
+/*   Updated: 2026/05/05 16:54:54 by yiannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,24 @@ typedef struct s_args
 	char	*scheduler;
 }	Myargs;
 
+typedef struct s_simulation
+{
+	Myargs *args;
+	
+} t_sim;
+
+typedef struct s_coder
+{
+	int id;
+	int time_to_burnout;
+} t_coder;
+
+
+
 char	*ft_strcpy(char *dest, const char *src);
 int		is_valid_arg(char *s);
 void	parse_shit(char *argv[], Myargs *args);
 void	check_shit(Myargs *args);
+void threadFunc(void *arg);
 
 #endif
