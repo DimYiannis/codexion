@@ -6,7 +6,7 @@
 /*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 11:02:34 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/05 17:45:41 by yiannis          ###   ########.fr       */
+/*   Updated: 2026/05/05 19:52:29 by yiannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,6 @@ int		is_valid_arg(char *s);
 void	parse_shit(char *argv[], Myargs *args);
 void	check_shit(Myargs *args);
 void	*threadFunc(void *arg);
+void	init_dongles(t_sim *sim);
 
 #endif
