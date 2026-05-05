@@ -17,7 +17,6 @@ void simulation(Myargs *args)
         sim.coders[i].id = i + 1;
         sim.coders[i].time_to_burnout = args->time_to_burnout;
         sim.coders[i].dongles = sim.dongles;
-        sim.coders[i].num_dongles = args->num_of_coders;
         pthread_create(&threads[i], NULL, &threadFunc, (void*)&sim.coders[i]);
         i++;
     }

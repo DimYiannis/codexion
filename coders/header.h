@@ -6,7 +6,7 @@
 /*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 11:02:34 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/05 19:52:29 by yiannis          ###   ########.fr       */
+/*   Updated: 2026/05/05 21:16:55 by yiannis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+typedef struct s_simulation t_sim;
+typedef struct s_coder t_coder;
 
 typedef struct s_args
 {
@@ -38,6 +40,7 @@ typedef struct s_dongle
 	pthread_mutex_t	mutex;
 	int				can_use;
 	int				cooldown;
+	pthread_cond_t	cond;
 }	t_dongle;
 
 typedef struct s_coder
@@ -45,7 +48,11 @@ typedef struct s_coder
 	int			id;
 	int			time_to_burnout;
 	t_dongle	*dongles;
-	int			num_dongles;
+	pthread_cond_t wait_cond;
+	t_sim	*sim;
+	int	compile_count;
+	int last_compile;
+	pthread_t thread;
 }	t_coder;
 
 typedef struct s_simulation
@@ -53,6 +60,11 @@ typedef struct s_simulation
 	Myargs		*args;
 	t_coder		*coders;
 	t_dongle	*dongles;
+	pthread_t	*threads;
+	int stop;
+	int start;
+	pthread_mutex_t stop_mutex;
+	pthread_mutex_t print_mutex;
 }	t_sim;
 
 
@@ -63,5 +75,7 @@ void	parse_shit(char *argv[], Myargs *args);
 void	check_shit(Myargs *args);
 void	*threadFunc(void *arg);
 void	init_dongles(t_sim *sim);
+void simulation(Myargs *args);
+
 
 #endif
