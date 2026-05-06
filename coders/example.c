@@ -9,7 +9,7 @@ void threadFunc(void *arg)
 {
     int i;
     long int localA = 0;
-    
+
     for (i = 1; i < 5000000; i++)
     {
         localA = localA + i;
