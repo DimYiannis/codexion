@@ -47,7 +47,6 @@ typedef struct s_coder
 {
 	int			id;
 	int			time_to_burnout;
-	t_dongle	*dongles;
 	pthread_cond_t wait_cond;
 	t_sim	*sim;
 	int	compile_count;
@@ -73,7 +72,7 @@ char	*ft_strcpy(char *dest, const char *src);
 int		is_valid_arg(char *s);
 void	parse_shit(char *argv[], Myargs *args);
 void	check_shit(Myargs *args);
-void	*threadFunc(void *arg);
+// void	*threadFunc(void *arg);
 void	init_dongles(t_sim *sim);
 void simulation(Myargs *args);
 
