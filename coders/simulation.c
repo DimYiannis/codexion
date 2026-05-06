@@ -12,11 +12,8 @@
 
 #include "header.h"
 
-void simulation(Myargs *args)
+void init_sim(t_sim *sim, Myargs *args)
 {
-  int i;
-  t_sim sim;
-
   sim.args = args;
   sim.stop = 0;
   sim.start = 0;
@@ -24,6 +21,12 @@ void simulation(Myargs *args)
   pthread_mutex_init(&sim.print_mutex,NULL);
   sim.coders = malloc(sizeof(t_coder) * args->num_of_coders);
   init_dongles(&sim);
+}
+
+void init_coders(t_sim *sim)
+{
+  int i;
+
   i = 0;
   while (i < args->num_of_coders)
   {
@@ -35,6 +38,15 @@ void simulation(Myargs *args)
     pthread_create(&sim.coders[i].thread, NULL, &threadFunc, (void*)&sim.coders[i]);
     i++;
   }
+}
+
+void simulation(Myargs *args)
+{
+  int i;
+  t_sim sim;
+
+  init_sim(&sim, args);
+  init_coders(&sim);
   i = 0;
   while (i < args->num_of_coders)
   {
