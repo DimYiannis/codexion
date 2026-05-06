@@ -12,12 +12,65 @@
 
 #include "header.h"
 
-
-pthread_mutex_t printlock;
-
-void print_state(char *msg, int value)
+void print_state(t_coder *coder)
 {
+  pthread_mutex_t printlock;
+
   pthread_mutex_t_lock(&printlock);
-  printf("%s: %d\n", msg, value);
+  printf("%d: %d %s\n",time coder->id, message);
   pthread_mutex_t_unlock(&printlock);
 }
+
+
+void log_compiling(t_coder *coder)
+{
+  long ms;
+
+  ms = get_time_ms(coder->sim->start_time);
+  pthread_mutex_t_lock(&coder->sim->print_mutex);
+  print("%ld %d is compiling\n");
+  pthread_mutex_t_unlock(&coder->sim->print_mutex);
+}
+
+void log_debugging()
+{
+  long ms;
+
+  ms = get_time_ms(coder->sim->start_time);
+  pthread_mutex_t_lock(&coder->sim->print_mutex);
+  print("%ld %d is compiling\n");
+  pthread_mutex_t_unlock(&coder->sim->print_mutex);
+
+}
+
+void log_refactoring()
+{
+  long ms;
+
+  ms = get_time_ms(coder->sim->start_time);
+  pthread_mutex_t_lock(&coder->sim->print_mutex);
+  print("%ld %d is compiling\n");
+  pthread_mutex_t_unlock(&coder->sim->print_mutex);
+
+}
+void log_taken_dongle()
+{
+  long ms;
+
+  ms = get_time_ms(coder->sim->start_time);
+  pthread_mutex_t_lock(&coder->sim->print_mutex);
+  print("%ld %d is compiling\n");
+  pthread_mutex_t_unlock(&coder->sim->print_mutex);
+
+}
+void log_burnout()
+{
+  long ms;
+
+  ms = get_time_ms(coder->sim->start_time);
+  pthread_mutex_t_lock(&coder->sim->print_mutex);
+  print("%ld %d is compiling\n");
+  pthread_mutex_t_unlock(&coder->sim->print_mutex);
+
+}
+

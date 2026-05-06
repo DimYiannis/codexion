@@ -41,3 +41,23 @@ int	is_valid_arg(char *s)
 	}
 	return (1);
 }
+
+long get_time_ms(struct timeval start)
+{
+  long result;
+  long sec;
+  long micro_sec;
+  struct timeval now;
+
+  result = 0;
+  gettitmeofday(&now, NULL);
+  sec = now.tv_sec - start.tv_sec;
+  micro_sec = now.tv_usec - start.tv_usec;
+  if (micro_sec < 0)
+  {
+    sec -= 1;
+    micro_sec += 1000000;
+  }
+  result = (now.tv_sec - start.tv_sec) * 1000 + (now.tv_usec - start.tv_usec) / 1000;
+  return result;
+}
