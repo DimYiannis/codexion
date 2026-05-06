@@ -24,6 +24,7 @@ void	init_dongles(t_sim *sim)
 		sim->dongles[i].can_use = 1;
 		sim->dongles[i].cooldown = sim->args->dongle_cooldown;
 		pthread_mutex_init(&sim->dongles[i].mutex, NULL);
+    pthread_cond_init(&sim->dongles[i].cond, NULL);
 		i++;
 	}
 }

@@ -14,27 +14,35 @@
 
 void simulation(Myargs *args)
 {
-    int i;
-    t_sim sim;
-    sim.args = args;
+  int i;
+  t_sim sim;
 
-    sim.coders = malloc(sizeof(t_coder) * args->num_of_coders);
-    init_dongles(&sim);
-    i = 0;
-    while (i < args->num_of_coders)
-    {
-        sim.coders[i].id = i + 1;
-        sim.coders[i].time_to_burnout = args->time_to_burnout;
-        sim.coders[i].sim = &sim; //back pointer
-        pthread_create(&sim.coders[i].thread, NULL, &threadFunc, (void*)&sim.coders[i]);
-        i++;
-    }
-    i = 0;
-    while (i < args->num_of_coders)
-    {
-        pthread_join(sim.coders[i].thread, NULL);
-        i++;
-    }
-    free(sim.coders);
-    free(sim.dongles);
+  sim.args = args;
+  sim.stop = 0;
+  sim.start = 0;
+  pthread_mutex_init(&sim.stop_mutex, NULL);
+  pthread_mutex_init(&sim.print_mutex,NULL);
+  sim.coders = malloc(sizeof(t_coder) * args->num_of_coders);
+  init_dongles(&sim);
+  i = 0;
+  while (i < args->num_of_coders)
+  {
+    sim.coders[i].id = i + 1;
+    sim.coders[i].time_to_burnout = args->time_to_burnout;
+    sim.coders[i].compile_count = 0;
+    sim.coders[i].last_compile = 0 ;
+    sim.coders[i].sim = &sim; //back pointer
+    pthread_create(&sim.coders[i].thread, NULL, &threadFunc, (void*)&sim.coders[i]);
+    i++;
+  }
+  i = 0;
+  while (i < args->num_of_coders)
+  {
+    pthread_join(sim.coders[i].thread, NULL);
+    i++;
+  }
+  pthread_mutex_destroy(&sim.stop_mutex);
+  pthread_mutex_destroy(&sim.print_mutex);
+  free(sim.coders);
+  free(sim.dongles);
 }
