@@ -12,7 +12,24 @@
 
 #include "header.h"
 
-void acquire_dongles(t_coder *coder)
+void *routine(void *arg)
 {
-    
+  t_coder *coder;
+
+  coder = arg;
+  while(!coder->sim->stop)
+  {
+    acquire_dongles(coder);
+    if(coder->sim->stop)
+      break;
+    coder->last_compile = get_time_ms(coder->sim->start);
+    log_event(coder, "is compiling");
+    usleep(coder->sim->threads->time_to_comp * 1000);
+    release_dongles(coder);
+    coder->compile_count++;
+    log_event(coder, "is debugging");
+    uslepp(coder->sim->threads->time_to_debug * 1000);
+    log_event(coder, "is refactoring");
+    usleep(coder->sim->threads->time_to_refactor * 1000);
+  }
 }

@@ -28,3 +28,13 @@ void	init_dongles(t_sim *sim)
 		i++;
 	}
 }
+
+void acquire_dongles(t_coder *coder)
+{
+
+}
+
+void release_dongles(t_coder *coder)
+{
+
+}
