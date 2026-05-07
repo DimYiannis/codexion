@@ -78,6 +78,6 @@ void simulation(Myargs *args);
 void acquire_dongles(t_coder *coder);
 long get_time_ms(struct timeval start);
 void log_event(t_coder *coder, char *msg);
-
+void *routine(void *arg);
 
 #endif

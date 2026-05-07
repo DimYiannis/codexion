@@ -14,13 +14,13 @@
 
 void init_sim(t_sim *sim, Myargs *args)
 {
-  sim.args = args;
-  sim.stop = 0;
-  sim.start = 0;
-  pthread_mutex_init(&sim.stop_mutex, NULL);
-  pthread_mutex_init(&sim.print_mutex,NULL);
-  sim.coders = malloc(sizeof(t_coder) * args->num_of_coders);
-  init_dongles(&sim);
+  sim->args = args;
+  sim->stop = 0;
+  sim->start = 0;
+  pthread_mutex_init(&sim->stop_mutex, NULL);
+  pthread_mutex_init(&sim->print_mutex,NULL);
+  sim->coders = malloc(sizeof(t_coder) * args->num_of_coders);
+  init_dongles(sim);
 }
 
 void init_coders(t_sim *sim)
@@ -28,14 +28,14 @@ void init_coders(t_sim *sim)
   int i;
 
   i = 0;
-  while (i < args->num_of_coders)
+  while (i < sim->args->num_of_coders)
   {
-    sim.coders[i].id = i + 1;
-    sim.coders[i].time_to_burnout = args->time_to_burnout;
-    sim.coders[i].compile_count = 0;
-    sim.coders[i].last_compile = 0 ;
-    sim.coders[i].sim = &sim; //back pointer
-    pthread_create(&sim.coders[i].thread, NULL, &threadFunc, (void*)&sim.coders[i]);
+    sim->coders[i].id = i + 1;
+    sim->coders[i].time_to_burnout = sim->args->time_to_burnout;
+    sim->coders[i].compile_count = 0;
+    sim->coders[i].last_compile = 0 ;
+    sim->coders[i].sim = sim; //back pointer for access to args
+    pthread_create(&sim->coders[i].thread, NULL, &routine, (void*)&sim->coders[i]);
     i++;
   }
 }
