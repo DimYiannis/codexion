@@ -1,6 +1,6 @@
 
 
-#include "header.h"
+#include "../header.h"
 
 
 int queue[256];
