@@ -68,10 +68,10 @@ typedef struct s_simulation
 
 typedef struct s_queue
 {
-  t_coder *coders;
+  t_coder **coders; // array of pointer to access the originals
   int size;
 
-} t_queue
+} t_queue;
 
 
 

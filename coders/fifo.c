@@ -12,7 +12,7 @@
 
 #include "header.h"
 
-init_queue(t_sim *sim)
+void init_queue(t_sim *sim)
 {
   t_queue queue;
   queue->coders = sim->coders;
@@ -21,19 +21,25 @@ init_queue(t_sim *sim)
 
 void enqueue(t_queue *queue, t_coder *coder)
 {
-  queue->coders[size] = coder;
+  queue->coders[queue->size] = coder;
   queue->size++;
 }
 
 t_coder *dequeue(t_queue *queue)
 {
+t_coder *first;
   int i;
 
   i = 1;
+  first = queue->coders[0];
   while (i < queue->size)
-    queue->coders[0] = queue->coders[i];
+  {
+    queue->coders[i - 1] = queue->coders[i];
+    i++;
+  }
   queue->size--;
-}
+  return (first);
+e
 
 
 
