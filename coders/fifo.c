@@ -15,6 +15,8 @@
 void init_queue(t_queue *queue, t_sim *sim)
 {
   queue->coders = malloc(sizeof(t_coder *) * sim->args->num_of_coders);
+  if (!queue->coders)
+    return;
   queue->size = 0;
 }
 
@@ -31,6 +33,8 @@ t_coder *dequeue(t_queue *queue)
 
   i = 1;
   first = queue->coders[0];
+  if (queue->size == 0)
+    return NULL;
   while (i < queue->size)
   {
     queue->coders[i - 1] = queue->coders[i];
@@ -39,7 +43,4 @@ t_coder *dequeue(t_queue *queue)
   queue->size--;
   return (first);
 }
-
-
-
 
