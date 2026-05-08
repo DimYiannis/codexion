@@ -50,7 +50,7 @@ long get_time_ms(struct timeval start)
   struct timeval now;
 
   result = 0;
-  gettitmeofday(&now, NULL);
+  gettimeofday(&now, NULL);
   sec = now.tv_sec - start.tv_sec;
   micro_sec = now.tv_usec - start.tv_usec;
   if (micro_sec < 0)
@@ -60,4 +60,13 @@ long get_time_ms(struct timeval start)
   }
   result = (now.tv_sec - start.tv_sec) * 1000 + (now.tv_usec - start.tv_usec) / 1000;
   return result;
+}
+
+void swap(t_coder **a, t_coder **b)
+{
+  t_coder *temp;
+
+  temp = *a;
+  *a = *b;
+  *b = temp;
 }
