@@ -12,10 +12,9 @@
 
 #include "header.h"
 
-void init_queue(t_sim *sim)
+void init_queue(t_queue *queue, t_sim *sim)
 {
-  t_queue queue;
-  queue->coders = sim->coders;
+  queue->coders = malloc(sizeof(t_coder *) * sim->args->num_of_coders);
   queue->size = 0;
 }
 
@@ -27,7 +26,7 @@ void enqueue(t_queue *queue, t_coder *coder)
 
 t_coder *dequeue(t_queue *queue)
 {
-t_coder *first;
+  t_coder *first;
   int i;
 
   i = 1;
@@ -39,7 +38,7 @@ t_coder *first;
   }
   queue->size--;
   return (first);
-e
+}
 
 
 
