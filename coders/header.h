@@ -66,6 +66,13 @@ typedef struct s_simulation
 	pthread_mutex_t print_mutex;
 }	t_sim;
 
+typedef struct s_queue
+{
+  t_coder *coders;
+  int size;
+
+} t_queue
+
 
 
 char	*ft_strcpy(char *dest, const char *src);
