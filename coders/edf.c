@@ -22,52 +22,67 @@ void init_heap(t_queue *queue, t_sim *sim)
 
 void heapify_down(t_queue *queue, int size, int i)
 {
+  int left;
+  int right;
+  int smallest;
 
+  while (1)
+  {
+    left = 2 * i + 1;
+    right = 2 * i + 2;
+    smallest = i;
+    
+    if ((left < size) && get_deadline(queue->coders[left]) <  get_deadline(queue->coders[smallest]))
+      smallest = left;
+    if (right < size && get_deadline(queue->coders[right]) <  get_deadline(queue->coders[smallest]))
+        smallest = right;
+    if (smallest == i)
+      break;
+    swap(&queue->coders[i], &queue->coders[smallest]);
+    i = smallest;
+  }
 }
 
 
 void heapify_up(t_coder **coders, int index)
 {
-  while (index > 0 && coders[(index - 1) / 2]):
+  int parent;
+
+  while (index > 0 && coders[(index - 1) / 2])
   {
-    swap(&coders[index], &coders[(index - 1) / 2]);
-    index = (index - 1) / 2;
+    parent = (index - 1) / 2;
+    if (get_deadline(coders[index]) < get_deadline(coders[parent]))
+    {  
+      swap(&coders[index], &coders[parent]);
+      index = parent;
+    }
+    else
+      break;
   }
 }
 
 
-void heap_push(t_queue *queue, t_sim *coder)
+void heap_push(t_queue *queue, t_coder *coder)
 {
   int index;
 
   queue->coders[queue->size] = coder;
   index = queue->size;
   queue->size++;
-  // heapify up
   heapify_up(queue->coders, index);
 }
 
-void heap_pop(t_queue *queue)
+t_coder *heap_pop(t_queue *queue)
 {
-  int index;
-  int i;
+  t_coder *root;
 
-  index = -1;
-  i = 0;
-  while(i < queue->size)
-  {
-    if (queue->coders[i] == queue->coders[0])
-    {
-      index = i;
-      break;
-    }
-  }
-  //valuue not found
-  if (index == -1)
-    return;
-  queue->coders[index] = queue->coders[index - 1];
+  if (queue->size == 0)
+    return (NULL);
+  root = queue->coders[0];
+  queue->coders[0] = queue->coders[queue->size - 1];
   queue->size--;
-  //heapify down
+  heapify_down(queue, queue->size, 0);
+  return (root);
 }
 
 

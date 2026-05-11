@@ -70,3 +70,8 @@ void swap(t_coder **a, t_coder **b)
   *a = *b;
   *b = temp;
 }
+
+long get_deadline(t_coder *coder)
+{
+	return (coder->last_compile + coder->time_to_burnout);
+}

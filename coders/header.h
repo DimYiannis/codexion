@@ -87,5 +87,6 @@ long get_time_ms(struct timeval start);
 void log_event(t_coder *coder, char *msg);
 void *routine(void *arg);
 void swap(t_coder **a, t_coder **b);
+long get_deadline(t_coder *coder);
 
 #endif
