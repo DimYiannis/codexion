@@ -83,6 +83,7 @@ void	check_shit(Myargs *args);
 void simulation(Myargs *args);
 void log_event(t_coder *coder, char *msg);
 void *routine(void *arg);
+void	*monitor(void *arg);
 
 // fifo.c
 void init_queue(t_queue *queue, t_sim *sim);

@@ -44,15 +44,18 @@ void simulation(Myargs *args)
 {
   int i;
   t_sim sim;
+  pthread_t monitor_thread;
 
   init_sim(&sim, args);
   init_coders(&sim);
+  pthread_create(&monitor_thread, NULL, &monitor, &sim);
   i = 0;
   while (i < args->num_of_coders)
   {
     pthread_join(sim.coders[i].thread, NULL);
     i++;
   }
+  pthread_join(monitor_thread, NULL);
   pthread_mutex_destroy(&sim.stop_mutex);
   pthread_mutex_destroy(&sim.print_mutex);
   free(sim.coders);
