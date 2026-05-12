@@ -12,6 +12,8 @@
 
 #include "header.h"
 
+void acquire_dongles(t_coder *coder);
+
 void	init_dongles(t_sim *sim)
 {
 	int	i;
@@ -31,9 +33,47 @@ void	init_dongles(t_sim *sim)
 	}
 }
 
+static void acquire_one(t_coder *coder, t_dongle *dongle)
+{
+  pthread_mutex_lock(&dongle->mutex);
+  sched_add(dongle, coder);
+  while (!coder->sim->stop)
+  {
+    if (!dongle->in_use && get_time_ms(coder->sim->start) >= dongle->free_at && dongle->queue.coders[0] == coder)
+      break;
+    pthread_cond_wait(&dongle->cond, &dongle->mutex);
+  }
+  if (coder->sim->stop)
+  {
+    pthread_mutex_unlock(&dongle->mutex)
+    return;
+  }
+  sched_del(dongle, coder);
+  dongle->in_use = 1;
+  pthread_mutex_unlock(&dongle->mutex);
+  log_event(coder, "has taken a dongle");
+}
+
 void acquire_dongles(t_coder *coder)
 {
+  int n;
 
+  n = coder->sim->args->num_of_coders;
+  if (n == 1)
+  {
+    acquire_one(coder, coder->left_dongle);
+    return;
+  }
+  if (coder->id == n)
+  {
+    acquire_one(coder, coder->left_dongle);
+    acquire_one(coder, coder->right_dongle);
+  }
+  else
+  {
+    acquire_one(coder, coder->left_dongle);
+    acquire_one(coder, coder->right_dongle);
+  }
 }
 
 void release_dongles(t_coder *coder)
