@@ -17,9 +17,9 @@ void log_event(t_coder *coder, char *msg)
 {
   long ms;
 
-  ms = get_time_ms(coder->sim->start_time);
-  pthread_mutex_t_lock(&coder->sim->print_mutex);
+  ms = get_time_ms(coder->sim->start);
+  pthread_mutex_lock(&coder->sim->print_mutex);
   printf("%ld %d %s\n", ms, coder->id, msg);
-  pthread_mutex_t_unlock(&coder->sim->print_mutex);
+  pthread_mutex_unlock(&coder->sim->print_mutex);
 }
 

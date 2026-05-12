@@ -32,4 +32,5 @@ void *routine(void *arg)
     log_event(coder, "is refactoring");
     usleep(coder->sim->args->time_to_refactor * 1000);
   }
+  return (NULL);
 }

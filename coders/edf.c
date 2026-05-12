@@ -52,7 +52,7 @@ void heapify_up(t_coder **coders, int index)
   {
     parent = (index - 1) / 2;
     if (get_deadline(coders[index]) < get_deadline(coders[parent]))
-    {  
+    {
       swap(&coders[index], &coders[parent]);
       index = parent;
     }

@@ -19,8 +19,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_simulation t_sim;
-typedef struct s_coder t_coder;
+typedef struct s_simulation	t_sim;
+typedef struct s_coder		t_coder;
 
 typedef struct s_args
 {
@@ -34,59 +34,60 @@ typedef struct s_args
 	char	*scheduler;
 }	Myargs;
 
+typedef struct s_queue
+{
+	t_coder **coders;  // array of pointer to access the originals
+	int size;
+} t_queue;
+
 typedef struct s_dongle
 {
 	int				id;
-	pthread_mutex_t	mutex;
-	int				can_use;
+	int				in_use;
+	long			free_at;
 	int				cooldown;
+	pthread_mutex_t	mutex;
 	pthread_cond_t	cond;
+	t_queue			queue;
 }	t_dongle;
 
 typedef struct s_coder
 {
-	int			id;
-	int			time_to_burnout;
+	int id;
+	int time_to_burnout;
 	pthread_cond_t wait_cond;
-	t_sim	*sim;
-	int	compile_count;
-	int last_compile;
+	t_sim *sim;
+	int compile_count;
+	long last_compile;
 	pthread_t thread;
+  t_dongle *left_dongle;
+	t_dongle *right_dongle;
 }	t_coder;
 
 typedef struct s_simulation
 {
-	Myargs		*args;
-	t_coder		*coders;
-	t_dongle	*dongles;
-	pthread_t	*threads;
+	Myargs *args;
+	t_coder *coders;
+	t_dongle *dongles;
+	pthread_t *threads;
 	int stop;
 	struct timeval  start;
 	pthread_mutex_t stop_mutex;
 	pthread_mutex_t print_mutex;
 }	t_sim;
 
-typedef struct s_queue
-{
-  t_coder **coders; // array of pointer to access the originals
-  int size;
-
-} t_queue;
-
-
-
-char	*ft_strcpy(char *dest, const char *src);
-int		is_valid_arg(char *s);
 void	parse_shit(char *argv[], Myargs *args);
 void	check_shit(Myargs *args);
-// void	*threadFunc(void *arg);
 void	init_dongles(t_sim *sim);
 void simulation(Myargs *args);
 void acquire_dongles(t_coder *coder);
-long get_time_ms(struct timeval start);
 void log_event(t_coder *coder, char *msg);
 void *routine(void *arg);
+
+// helpers.c
 void swap(t_coder **a, t_coder **b);
 long get_deadline(t_coder *coder);
+long get_time_ms(struct timeval start);
+int is_valid_arg(char *s);
 
 #endif

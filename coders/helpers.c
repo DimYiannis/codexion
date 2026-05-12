@@ -12,20 +12,6 @@
 
 #include "header.h"
 
-char	*ft_strcpy(char *dest, const char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
 int	is_valid_arg(char *s)
 {
 	int	i;
@@ -58,7 +44,7 @@ long get_time_ms(struct timeval start)
     sec -= 1;
     micro_sec += 1000000;
   }
-  result = (now.tv_sec - start.tv_sec) * 1000 + (now.tv_usec - start.tv_usec) / 1000;
+  result = sec * 1000 + micro_sec / 1000;
   return result;
 }
 
