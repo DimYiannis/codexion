@@ -12,6 +12,9 @@
 
 #include "header.h"
 
+static void	acquire_one(t_coder *coder, t_dongle *dongle);
+static void	release_one(t_coder *coder, t_dongle *dongle);
+
 void	init_dongles(t_sim *sim)
 {
 	int	i;
@@ -22,7 +25,7 @@ void	init_dongles(t_sim *sim)
 	{
 		sim->dongles[i].id = i;
 		sim->dongles[i].in_use = 0;
-    sim->dongle[i].free_at = 0;
+    sim->dongles[i].free_at = 0;
 		sim->dongles[i].cooldown = sim->args->dongle_cooldown;
 		pthread_mutex_init(&sim->dongles[i].mutex, NULL);
     pthread_cond_init(&sim->dongles[i].cond, NULL);
@@ -44,8 +47,8 @@ void acquire_dongles(t_coder *coder)
   }
   if (coder->id == n)
   {
-    acquire_one(coder, coder->left_dongle);
     acquire_one(coder, coder->right_dongle);
+    acquire_one(coder, coder->left_dongle);
   }
   else
   {
@@ -80,7 +83,7 @@ static void acquire_one(t_coder *coder, t_dongle *dongle)
   }
   if (coder->sim->stop)
   {
-    pthread_mutex_unlock(&dongle->mutex)
+    pthread_mutex_unlock(&dongle->mutex);
     return;
   }
   sched_del(dongle, coder);
@@ -94,6 +97,6 @@ static void release_one(t_coder *coder, t_dongle *dongle)
   pthread_mutex_lock(&dongle->mutex);
   dongle->in_use = 0;
   dongle->free_at = get_time_ms(coder->sim->start) + dongle->cooldown;
-  pthread_cond_broadcast(&dongle->cond);
+  pthread_cond_broadcast(&dongle->cond); // wake all threads waiting on that cond
   pthread_mutex_unlock(&dongle->mutex);
 }
