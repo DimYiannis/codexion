@@ -76,18 +76,37 @@ typedef struct s_simulation
 	pthread_mutex_t print_mutex;
 }	t_sim;
 
+// parser
 void	parse_shit(char *argv[], Myargs *args);
 void	check_shit(Myargs *args);
-void	init_dongles(t_sim *sim);
+
 void simulation(Myargs *args);
-void acquire_dongles(t_coder *coder);
 void log_event(t_coder *coder, char *msg);
 void *routine(void *arg);
+
+// fifo.c
+void init_queue(t_queue *queue, t_sim *sim);
+void enqueue(t_queue *queue, t_coder *coder);
+t_coder *dequeue(t_queue *queue);
+
+// edf.c
+void init_heap(t_queue *queue, t_sim *sim);
+void heap_push(t_queue *queue, t_coder *coder);
+t_coder *heap_pop(t_queue *queue);
 
 // helpers.c
 void swap(t_coder **a, t_coder **b);
 long get_deadline(t_coder *coder);
 long get_time_ms(struct timeval start);
 int is_valid_arg(char *s);
+
+// scheduler.c
+void sched_init(t_dongle *dongle, t_sim *sim);
+void sched_add(t_dongle *dongle, t_coder *coder);
+void sched_del(t_dongle *dongle, t_coder *coder);
+
+//dongles.c
+void  acquire_dongles(t_coder *coder);
+void  init_dongles(t_sim *sim);
 
 #endif

@@ -21,10 +21,12 @@ void	init_dongles(t_sim *sim)
 	while (i < sim->args->num_of_coders)
 	{
 		sim->dongles[i].id = i;
-		sim->dongles[i].can_use = 1;
+		sim->dongles[i].in_use = 0;
+    sim->dongle[i].free_at = 0;
 		sim->dongles[i].cooldown = sim->args->dongle_cooldown;
 		pthread_mutex_init(&sim->dongles[i].mutex, NULL);
     pthread_cond_init(&sim->dongles[i].cond, NULL);
+    sched_init(&sim->dongles[i], sim);
 		i++;
 	}
 }
