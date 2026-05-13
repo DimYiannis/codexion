@@ -51,7 +51,7 @@ void	heapify_up(t_coder **coders, int index)
 	while (index > 0)
 	{
 		parent = (index - 1) / 2;
-		if (smaller_deadline(queue->coders[index], queue->coders[parent]))
+		if (smaller_deadline(coders[index], coders[parent]))
 		{
 			swap(&coders[index], &coders[parent]);
 			index = parent;
