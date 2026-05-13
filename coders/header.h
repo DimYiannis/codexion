@@ -109,5 +109,6 @@ void sched_del(t_dongle *dongle, t_coder *coder);
 //dongles.c
 void  acquire_dongles(t_coder *coder);
 void  init_dongles(t_sim *sim);
+void release_dongles(t_coder *coder);
 
 #endif

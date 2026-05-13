@@ -1,9 +1,10 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 
 NAME = codexion
 
-SRC = main.c parser.c helpers.c
+SRC = main.c parser.c helpers.c simulation.c coder.c dongle.c \
+      scheduler.c fifo.c edf.c monitor.c log.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
