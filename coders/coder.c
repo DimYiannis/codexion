@@ -22,11 +22,15 @@ void *routine(void *arg)
     acquire_dongles(coder);
     if(coder->sim->stop)
       break;
+    pthread_mutex_lock(&coder->state_mutex);
     coder->last_compile = get_time_ms(coder->sim->start);
+    pthread_mutex_unlock(&coder->state_mutex);
     log_event(coder, "is compiling");
     usleep(coder->sim->args->time_to_comp * 1000);
     release_dongles(coder);
+    pthread_mutex_lock(&coder->state_mutex);
     coder->compile_count++;
+    pthread_mutex_unlock(&coder->state_mutex);
     log_event(coder, "is debugging");
     usleep(coder->sim->args->time_to_debug * 1000);
     log_event(coder, "is refactoring");

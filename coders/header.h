@@ -62,6 +62,7 @@ typedef struct s_coder
 	pthread_t thread;
   t_dongle *left_dongle;
 	t_dongle *right_dongle;
+  pthread_mutex_t state_mutex;
 }	t_coder;
 
 typedef struct s_simulation

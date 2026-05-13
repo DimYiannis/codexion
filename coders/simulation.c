@@ -37,6 +37,7 @@ void init_coders(t_sim *sim)
     sim->coders[i].sim = sim; //back pointer for access to args
     sim->coders[i].left_dongle = &sim->dongles[i];
     sim->coders[i].right_dongle = &sim->dongles[(i + 1) % sim->args->num_of_coders]; // wrap back to 0, circular arrangement
+    pthread_mutex_init(&sim->coders[i].state_mutex, NULL);
     pthread_create(&sim->coders[i].thread, NULL, &routine, (void*)&sim->coders[i]);
     i++;
   }
@@ -53,13 +54,15 @@ void simulation(Myargs *args)
   pthread_create(&monitor_thread, NULL, &monitor, &sim);
   i = 0;
   while (i < args->num_of_coders)
-  {
-    pthread_join(sim.coders[i].thread, NULL);
-    i++;
-  }
+    pthread_join(sim.coders[i++].thread, NULL);
+
   pthread_join(monitor_thread, NULL);
   pthread_mutex_destroy(&sim.stop_mutex);
   pthread_mutex_destroy(&sim.print_mutex);
+  i = 0;
+  while (i < args->num_of_coders)
+    pthread_mutex_destroy(&sim.coders[i++].state_mutex);
+
   free(sim.coders);
   free(sim.dongles);
 }
