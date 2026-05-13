@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 11:22:41 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/05 09:24:24 by yiannis          ###   ########.fr       */
+/*   Updated: 2026/05/13 11:42:30 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void	parse_shit(char *argv[], Myargs *args)
+void	parse_shit(char *argv[], t_args *args)
 {
 	int	i;
 
@@ -37,16 +37,17 @@ void	parse_shit(char *argv[], Myargs *args)
 	check_shit(args);
 }
 
-void	check_shit(Myargs *args)
+void	check_shit(t_args *args)
 {
 	if (args->num_of_coders < 1 || args->num_of_comps_required < 1)
 	{
 		fprintf(stderr, "invalid input, insert positive integers\n");
 		exit(1);
 	}
-	if (strcmp(args->scheduler, "fifo") != 0 && strcmp(args->scheduler, "edf") != 0)
+	if (strcmp(args->scheduler, "fifo") != 0 && strcmp(args->scheduler,
+			"edf") != 0)
 	{
-		fprintf(stderr, "invalid input, value must be exactly one of: fifo or edf\n");
+		fprintf(stderr, "invalid input value must be one of: fifo or edf\n");
 		exit(1);
 	}
 }

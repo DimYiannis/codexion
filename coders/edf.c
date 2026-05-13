@@ -6,83 +6,80 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:11:23 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/08 10:13:51 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/13 13:05:48 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-void init_heap(t_queue *queue, t_sim *sim)
+void	init_heap(t_queue *queue, t_sim *sim)
 {
-  queue->coders = malloc(sizeof(t_coder *) * sim->args->num_of_coders);
-  if (!queue->coders)
-    return;
-  queue->size = 0;
+	queue->coders = malloc(sizeof(t_coder *) * sim->args->num_of_coders);
+	if (!queue->coders)
+		return ;
+	queue->size = 0;
 }
 
-void heapify_down(t_queue *queue, int size, int i)
+void	heapify_down(t_queue *queue, int size, int i)
 {
-  int left;
-  int right;
-  int smallest;
+	int	left;
+	int	right;
+	int	root;
 
-  while (1)
-  {
-    left = 2 * i + 1;
-    right = 2 * i + 2;
-    smallest = i;
-
-    if ((left < size) && (get_deadline(queue->coders[left]) <  get_deadline(queue->coders[smallest]) || (get_deadline(queue->coders[left]) == get_deadline(queue->coders[smallest]) && queue->coders[left]->id < queue->coders[smallest]->id)))
-      smallest = left;
-    if (right < size && (get_deadline(queue->coders[right]) <  get_deadline(queue->coders[smallest]) || (get_deadline(queue->coders[right]) == get_deadline(queue->coders[smallest]) && queue->coders[right]->id < queue->coders[smallest]->id)))
-        smallest = right;
-    if (smallest == i)
-      break;
-    swap(&queue->coders[i], &queue->coders[smallest]);
-    i = smallest;
-  }
+	while (1)
+	{
+		left = 2 * i + 1;
+		right = 2 * i + 2;
+		root = i;
+		if ((left < size) && min_deadln(queue->coders[left],
+				queue->coders[root]))
+			root = left;
+		if (right < size && min_deadln(queue->coders[right],
+				queue->coders[root]))
+			root = right;
+		if (root == i)
+			break ;
+		swap(&queue->coders[i], &queue->coders[root]);
+		i = root;
+	}
 }
 
-
-void heapify_up(t_coder **coders, int index)
+void	heapify_up(t_coder **coders, int index)
 {
-  int parent;
+	int	parent;
 
-  while (index > 0)
-  {
-    parent = (index - 1) / 2;
-    if (get_deadline(coders[index]) < get_deadline(coders[parent]) || (get_deadline(coders[index]) == get_deadline(coders[parent]) && coders[index]->id < coders[parent]->id))
-    {
-      swap(&coders[index], &coders[parent]);
-      index = parent;
-    }
-    else
-      break;
-  }
+	while (index > 0)
+	{
+		parent = (index - 1) / 2;
+		if (smaller_deadline(queue->coders[index], queue->coders[parent]))
+		{
+			swap(&coders[index], &coders[parent]);
+			index = parent;
+		}
+		else
+			break ;
+	}
 }
 
-
-void heap_push(t_queue *queue, t_coder *coder)
+void	heap_push(t_queue *queue, t_coder *coder)
 {
-  int index;
+	int	index;
 
-  queue->coders[queue->size] = coder;
-  index = queue->size;
-  queue->size++;
-  heapify_up(queue->coders, index);
+	queue->coders[queue->size] = coder;
+	index = queue->size;
+	queue->size++;
+	heapify_up(queue->coders, index);
 }
 
-t_coder *heap_pop(t_queue *queue)
+t_coder	*heap_pop(t_queue *queue)
 {
-  t_coder *root;
+	t_coder	*root;
 
-  if (queue->size == 0)
-    return (NULL);
-  root = queue->coders[0];
-  queue->coders[0] = queue->coders[queue->size - 1];
-  queue->size--;
-  heapify_down(queue, queue->size, 0);
-  return (root);
+	if (queue->size == 0)
+		return (NULL);
+	root = queue->coders[0];
+	queue->coders[0] = queue->coders[queue->size - 1];
+	queue->size--;
+	heapify_down(queue, queue->size, 0);
+	return (root);
 }
-
-

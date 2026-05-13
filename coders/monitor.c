@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:06:10 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/06 10:06:23 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/13 11:22:15 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,15 @@ static int	check_burnout(t_sim *sim)
 {
 	int		i;
 	long	now;
-  long last_comp;
+	long	last_comp;
 
 	i = 0;
 	now = get_time_ms(sim->start);
- 	while (i < sim->args->num_of_coders)
+	while (i < sim->args->num_of_coders)
 	{
-    pthread_mutex_lock(&sim->coders[i].state_mutex);
-    last_comp = sim->coders[i].last_compile;
-    pthread_mutex_unlock(&sim->coders[i].state_mutex);
-
+		pthread_mutex_lock(&sim->coders[i].state_mutex);
+		last_comp = sim->coders[i].last_compile;
+		pthread_mutex_unlock(&sim->coders[i].state_mutex);
 		if (now - last_comp > sim->args->time_to_burnout)
 		{
 			log_event(&sim->coders[i], "burned out");
@@ -42,14 +41,14 @@ static int	check_burnout(t_sim *sim)
 static int	check_done(t_sim *sim)
 {
 	int	i;
-  int count;
+	int	count;
 
 	i = 0;
-  	while (i < sim->args->num_of_coders)
+	while (i < sim->args->num_of_coders)
 	{
-    pthread_mutex_lock(&sim->coders[i].state_mutex);
-    count = sim->coders[i].compile_count;
-    pthread_mutex_unlock(&sim->coders[i].state_mutex);
+		pthread_mutex_lock(&sim->coders[i].state_mutex);
+		count = sim->coders[i].compile_count;
+		pthread_mutex_unlock(&sim->coders[i].state_mutex);
 		if (count < sim->args->num_of_comps_required)
 			return (0);
 		i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yiannis <yiannis@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 17:07:38 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/05 09:23:40 by yiannis          ###   ########.fr       */
+/*   Updated: 2026/05/13 13:04:34 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,36 +28,46 @@ int	is_valid_arg(char *s)
 	return (1);
 }
 
-long get_time_ms(struct timeval start)
+long	get_time_ms(struct timeval start)
 {
-  long result;
-  long sec;
-  long micro_sec;
-  struct timeval now;
+	long			result;
+	long			sec;
+	long			micro_sec;
+	struct timeval	now;
 
-  result = 0;
-  gettimeofday(&now, NULL);
-  sec = now.tv_sec - start.tv_sec;
-  micro_sec = now.tv_usec - start.tv_usec;
-  if (micro_sec < 0)
-  {
-    sec -= 1;
-    micro_sec += 1000000;
-  }
-  result = sec * 1000 + micro_sec / 1000;
-  return result;
+	result = 0;
+	gettimeofday(&now, NULL);
+	sec = now.tv_sec - start.tv_sec;
+	micro_sec = now.tv_usec - start.tv_usec;
+	if (micro_sec < 0)
+	{
+		sec -= 1;
+		micro_sec += 1000000;
+	}
+	result = sec * 1000 + micro_sec / 1000;
+	return (result);
 }
 
-void swap(t_coder **a, t_coder **b)
+void	swap(t_coder **a, t_coder **b)
 {
-  t_coder *temp;
+	t_coder	*temp;
 
-  temp = *a;
-  *a = *b;
-  *b = temp;
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
 
-long get_deadline(t_coder *coder)
+long	get_deadline(t_coder *coder)
 {
 	return (coder->last_compile + coder->time_to_burnout);
+}
+
+int	min_deadln(t_coder *a, t_coder *b)
+{
+	long	deadln_a;
+	long	deadln_b;
+
+	deadln_a = get_deadline(a);
+	deadln_b = get_deadline(b);
+	return (deadln_a < deadln_b || (deadln_a == deadln_b && a->id < b->id));
 }
