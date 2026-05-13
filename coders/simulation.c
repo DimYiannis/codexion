@@ -35,6 +35,8 @@ void init_coders(t_sim *sim)
     sim->coders[i].compile_count = 0;
     sim->coders[i].last_compile = 0 ;
     sim->coders[i].sim = sim; //back pointer for access to args
+    sim->coders[i].left_dongle = &sim->dongles[i];
+    sim->coders[i].right_dongle = &sim->dongles[(i + 1) % sim->args->num_of_coders]; // wrap back to 0, circular arrangement
     pthread_create(&sim->coders[i].thread, NULL, &routine, (void*)&sim->coders[i]);
     i++;
   }
