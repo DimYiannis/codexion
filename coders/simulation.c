@@ -55,14 +55,30 @@ void simulation(Myargs *args)
   i = 0;
   while (i < args->num_of_coders)
     pthread_join(sim.coders[i++].thread, NULL);
-
   pthread_join(monitor_thread, NULL);
   pthread_mutex_destroy(&sim.stop_mutex);
   pthread_mutex_destroy(&sim.print_mutex);
   i = 0;
   while (i < args->num_of_coders)
-    pthread_mutex_destroy(&sim.coders[i++].state_mutex);
-
+  {
+    pthread_mutex_destroy(&sim.coders[i].state_mutex);
+    free(sim.dongles[i].queue.coders);
+    i++;
+  }
   free(sim.coders);
+  cleanup_dongles(&sim);
   free(sim.dongles);
+}
+
+void	cleanup_dongles(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->args->num_of_coders)
+	{
+	  pthread_mutex_destroy(&sim->dongles[i].mutex);
+		pthread_cond_destroy(&sim->dongles[i].cond);
+		i++;
+	}
 }

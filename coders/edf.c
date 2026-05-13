@@ -31,10 +31,10 @@ void heapify_down(t_queue *queue, int size, int i)
     left = 2 * i + 1;
     right = 2 * i + 2;
     smallest = i;
-    
-    if ((left < size) && get_deadline(queue->coders[left]) <  get_deadline(queue->coders[smallest]))
+
+    if ((left < size) && (get_deadline(queue->coders[left]) <  get_deadline(queue->coders[smallest]) || (get_deadline(queue->coders[left]) == get_deadline(queue->coders[smallest]) && queue->coders[left]->id < queue->coders[smallest]->id)))
       smallest = left;
-    if (right < size && get_deadline(queue->coders[right]) <  get_deadline(queue->coders[smallest]))
+    if (right < size && (get_deadline(queue->coders[right]) <  get_deadline(queue->coders[smallest]) || (get_deadline(queue->coders[right]) == get_deadline(queue->coders[smallest]) && queue->coders[right]->id < queue->coders[smallest]->id)))
         smallest = right;
     if (smallest == i)
       break;
@@ -48,10 +48,10 @@ void heapify_up(t_coder **coders, int index)
 {
   int parent;
 
-  while (index > 0 && coders[(index - 1) / 2])
+  while (index > 0)
   {
     parent = (index - 1) / 2;
-    if (get_deadline(coders[index]) < get_deadline(coders[parent]))
+    if (get_deadline(coders[index]) < get_deadline(coders[parent]) || (get_deadline(coders[index]) == get_deadline(coders[parent]) && coders[index]->id < coders[parent]->id))
     {
       swap(&coders[index], &coders[parent]);
       index = parent;

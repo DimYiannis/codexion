@@ -55,7 +55,6 @@ typedef struct s_coder
 {
 	int id;
 	int time_to_burnout;
-	pthread_cond_t wait_cond;
 	t_sim *sim;
 	int compile_count;
 	long last_compile;
@@ -85,6 +84,7 @@ void simulation(Myargs *args);
 void log_event(t_coder *coder, char *msg);
 void *routine(void *arg);
 void	*monitor(void *arg);
+void	cleanup_dongles(t_sim *sim);
 
 // fifo.c
 void init_queue(t_queue *queue, t_sim *sim);
