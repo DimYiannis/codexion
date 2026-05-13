@@ -18,6 +18,7 @@ void	log_event(t_coder *coder, char *msg)
 
 	ms = get_time_ms(coder->sim->start);
 	pthread_mutex_lock(&coder->sim->print_mutex);
-	printf("%ld %d %s\n", ms, coder->id, msg);
+	if (!coder->sim->stop)
+		printf("%ld %d %s\n", ms, coder->id, msg);
 	pthread_mutex_unlock(&coder->sim->print_mutex);
 }
