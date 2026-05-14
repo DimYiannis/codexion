@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:05:33 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:01 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/14 15:27:25 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	acquire_dongles(t_coder *coder)
 		if (!acquire_one(coder, first, 1))
 			return ;
 		if (acquire_one(coder, second, 0))
-			return (log_event(coder, "has taken a dongle"), usleep(1000), log_event(coder,
+			return (log_event(coder, "has taken a dongle"), log_event(coder,
 					"has taken a dongle"));
 		release_one(coder, first, 1);
 		usleep(1000);
