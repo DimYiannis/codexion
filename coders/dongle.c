@@ -12,7 +12,7 @@
 
 #include "header.h"
 
-static void	acquire_one(t_coder *coder, t_dongle *dongle);
+static int	acquire_one(t_coder *coder, t_dongle *dongle, int blocked);
 static void	release_one(t_coder *coder, t_dongle *dongle);
 
 void	init_dongles(t_sim *sim)
@@ -36,23 +36,31 @@ void	init_dongles(t_sim *sim)
 
 void	acquire_dongles(t_coder *coder)
 {
-	int	n;
+	int		n;
+	t_dongle	*first;
+	t_dongle	*second;
 
 	n = coder->sim->args->num_of_coders;
 	if (n == 1)
 	{
-		acquire_one(coder, coder->left_dongle);
+		acquire_one(coder, coder->left_dongle, 1);
 		return ;
 	}
+	first = coder->left_dongle;
+	second = coder->right_dongle;
 	if (coder->id == n)
 	{
-		acquire_one(coder, coder->right_dongle);
-		acquire_one(coder, coder->left_dongle);
+		first = coder->right_dongle;
+		second = coder->left_dongle;
 	}
-	else
+	while (!coder->sim->stop)
 	{
-		acquire_one(coder, coder->left_dongle);
-		acquire_one(coder, coder->right_dongle);
+		if (!acquire_one(coder, first, 1))
+			return ;
+		if (acquire_one(coder, second, 0))
+			return ;
+		release_one(coder, first);
+		usleep(1000);
 	}
 }
 
@@ -70,7 +78,7 @@ void	release_dongles(t_coder *coder)
 	release_one(coder, coder->right_dongle);
 }
 
-static void	acquire_one(t_coder *coder, t_dongle *dongle)
+static int	acquire_one(t_coder *coder, t_dongle *dongle, int blocked)
 {
 	pthread_mutex_lock(&dongle->mutex);
 	sched_add(dongle, coder);
@@ -79,18 +87,23 @@ static void	acquire_one(t_coder *coder, t_dongle *dongle)
 		if (!dongle->in_use && get_time_ms(coder->sim->start) >= dongle->free_at
 			&& dongle->queue.coders[0] == coder)
 			break ;
+		if (!blocked)
+			break ;
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 	}
-	if (coder->sim->stop)
+	if (!coder->sim->stop && !dongle->in_use
+		&& get_time_ms(coder->sim->start) >= dongle->free_at
+		&& dongle->queue.coders[0] == coder)
 	{
 		sched_del(dongle, coder);
+		dongle->in_use = 1;
 		pthread_mutex_unlock(&dongle->mutex);
-		return ;
+		log_event(coder, "has taken a dongle");
+		return (1);
 	}
 	sched_del(dongle, coder);
-	dongle->in_use = 1;
 	pthread_mutex_unlock(&dongle->mutex);
-	log_event(coder, "has taken a dongle");
+	return (0);
 }
 
 static void	release_one(t_coder *coder, t_dongle *dongle)
