@@ -61,17 +61,12 @@ void	swap(t_coder **a, t_coder **b)
 	*b = temp;
 }
 
-long	get_deadline(t_coder *coder)
-{
-	return (coder->last_compile + coder->time_to_burnout);
-}
-
 int	min_deadln(t_coder *a, t_coder *b)
 {
 	long	deadln_a;
 	long	deadln_b;
 
-	deadln_a = get_deadline(a);
-	deadln_b = get_deadline(b);
+	deadln_a = a->last_compile + a->time_to_burnout;
+	deadln_b = b->last_compile + b->time_to_burnout;
 	return (deadln_a < deadln_b || (deadln_a == deadln_b && a->id < b->id));
 }

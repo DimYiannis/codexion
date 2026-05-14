@@ -97,7 +97,6 @@ t_coder						*heap_pop(t_queue *queue);
 
 // helpers.c
 void						swap(t_coder **a, t_coder **b);
-long						get_deadline(t_coder *coder);
 long						get_time_ms(struct timeval start);
 int							is_valid_arg(char *s);
 int							min_deadln(t_coder *a, t_coder *b);
