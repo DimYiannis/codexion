@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:05:24 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 11:21:31 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/14 15:11:32 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*routine(void *arg)
 	while (!coder->sim->stop)
 	{
 		acquire_dongles(coder);
-		if (coder->sim->stop)
+		if (coder->sim->stop || coder->sim->args->num_of_coders == 1)
 			break ;
 		pthread_mutex_lock(&coder->state_mutex);
 		coder->last_compile = get_time_ms(coder->sim->start);
