@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:05:33 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/14 11:38:46 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/14 12:31:34 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,6 @@
 
 static int	acquire_one(t_coder *coder, t_dongle *dongle, int blocked);
 static void	release_one(t_coder *coder, t_dongle *dongle);
-
-void	init_dongles(t_sim *sim)
-{
-	int	i;
-
-	sim->dongles = malloc(sizeof(t_dongle) * sim->args->num_of_coders);
-	i = 0;
-	while (i < sim->args->num_of_coders)
-	{
-		sim->dongles[i].id = i;
-		sim->dongles[i].in_use = 0;
-		sim->dongles[i].free_at = 0;
-		sim->dongles[i].cooldown = sim->args->dongle_cooldown;
-		pthread_mutex_init(&sim->dongles[i].mutex, NULL);
-		pthread_cond_init(&sim->dongles[i].cond, NULL);
-		sched_init(&sim->dongles[i], sim);
-		i++;
-	}
-}
 
 void	acquire_dongles(t_coder *coder)
 {
@@ -111,4 +92,17 @@ static void	release_one(t_coder *coder, t_dongle *dongle)
 	dongle->free_at = get_time_ms(coder->sim->start) + dongle->cooldown;
 	pthread_cond_broadcast(&dongle->cond);
 	pthread_mutex_unlock(&dongle->mutex);
+}
+
+void	cleanup_dongles(t_sim *sim)
+{
+	int	i;
+
+	i = 0;
+	while (i < sim->args->num_of_coders)
+	{
+		pthread_mutex_destroy(&sim->dongles[i].mutex);
+		pthread_cond_destroy(&sim->dongles[i].cond);
+		i++;
+	}
 }

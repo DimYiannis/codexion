@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/04 11:02:34 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 13:04:43 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/14 12:34:22 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void						simulation(t_args *args);
 void						log_event(t_coder *coder, char *msg);
 void						*routine(void *arg);
 void						*monitor(void *arg);
-void						cleanup_dongles(t_sim *sim);
 
 // fifo.c
 void						init_queue(t_queue *queue, t_sim *sim);
@@ -108,7 +107,12 @@ void						sched_del(t_dongle *dongle, t_coder *coder);
 
 // dongles.c
 void						acquire_dongles(t_coder *coder);
-void						init_dongles(t_sim *sim);
 void						release_dongles(t_coder *coder);
+void						cleanup_dongles(t_sim *sim);
+
+// initialize.c
+void						init_dongles(t_sim *sim);
+void						init_coders(t_sim *sim);
+void						init_sim(t_sim *sim, t_args *args);
 
 #endif
