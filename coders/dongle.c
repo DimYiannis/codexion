@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:05:33 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 11:27:16 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/14 11:38:46 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_dongles(t_sim *sim)
 
 void	acquire_dongles(t_coder *coder)
 {
-	int		n;
+	int			n;
 	t_dongle	*first;
 	t_dongle	*second;
 
@@ -55,9 +55,7 @@ void	acquire_dongles(t_coder *coder)
 	}
 	while (!coder->sim->stop)
 	{
-		if (!acquire_one(coder, first, 1))
-			return ;
-		if (acquire_one(coder, second, 0))
+		if (!acquire_one(coder, first, 1) || acquire_one(coder, second, 0))
 			return ;
 		release_one(coder, first);
 		usleep(1000);
