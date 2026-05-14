@@ -25,6 +25,10 @@ int	is_valid_arg(char *s)
 			return (0);
 		i++;
 	}
+	if (i > 10)
+		return (0);
+	if (i == 10 && strcmp(s, "2147483647") > 0)
+		return (0);
 	return (1);
 }
 

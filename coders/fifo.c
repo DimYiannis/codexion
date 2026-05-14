@@ -31,10 +31,10 @@ t_coder	*dequeue(t_queue *queue)
 	t_coder	*first;
 	int		i;
 
-	i = 1;
-	first = queue->coders[0];
 	if (queue->size == 0)
 		return (NULL);
+	i = 1;
+	first = queue->coders[0];
 	while (i < queue->size)
 	{
 		queue->coders[i - 1] = queue->coders[i];

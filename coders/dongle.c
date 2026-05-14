@@ -83,6 +83,7 @@ static void	acquire_one(t_coder *coder, t_dongle *dongle)
 	}
 	if (coder->sim->stop)
 	{
+		sched_del(dongle, coder);
 		pthread_mutex_unlock(&dongle->mutex);
 		return ;
 	}

@@ -37,6 +37,8 @@ All arguments are mandatory. `scheduler` must be `fifo` or `edf`. All time value
 
 # Force burnout — timeout too tight
 ./codexion 4 300 200 100 100 5 200 fifo
+
+./codexion 3 1000 200 100 100 5 300 edf
 ```
 
 **Makefile targets:** `all`, `clean`, `fclean`, `re`

@@ -27,10 +27,11 @@ static int	check_burnout(t_sim *sim)
 		pthread_mutex_unlock(&sim->coders[i].state_mutex);
 		if (now - last_comp > sim->args->time_to_burnout)
 		{
-			log_event(&sim->coders[i], "burned out");
-			pthread_mutex_lock(&sim->stop_mutex);
+			pthread_mutex_lock(&sim->print_mutex);
 			sim->stop = 1;
-			pthread_mutex_unlock(&sim->stop_mutex);
+			printf("%ld %d burned out\n", get_time_ms(sim->start),
+				sim->coders[i].id);
+			pthread_mutex_unlock(&sim->print_mutex);
 			return (1);
 		}
 		i++;
