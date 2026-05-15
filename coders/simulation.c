@@ -25,7 +25,6 @@ void	simulation(t_args *args)
 	while (i < args->num_of_coders)
 		pthread_join(sim.coders[i++].thread, NULL);
 	pthread_join(monitor_thread, NULL);
-	pthread_mutex_destroy(&sim.stop_mutex);
 	pthread_mutex_destroy(&sim.print_mutex);
 	i = 0;
 	while (i < args->num_of_coders)

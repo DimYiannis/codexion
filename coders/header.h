@@ -71,7 +71,6 @@ typedef struct s_simulation
 	t_dongle				*dongles;
 	int						stop;
 	struct timeval			start;
-	pthread_mutex_t			stop_mutex;
 	pthread_mutex_t			print_mutex;
 }							t_sim;
 
@@ -99,6 +98,7 @@ void						swap(t_coder **a, t_coder **b);
 long						get_time_ms(struct timeval start);
 int							is_valid_arg(char *s);
 int							min_deadln(t_coder *a, t_coder *b);
+int							get_stop(t_sim *sim);
 
 // scheduler.c
 void						sched_init(t_dongle *dongle, t_sim *sim);

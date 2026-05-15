@@ -17,10 +17,10 @@ void	*routine(void *arg)
 	t_coder	*coder;
 
 	coder = arg;
-	while (!coder->sim->stop)
+	while (!get_stop(coder->sim))
 	{
 		acquire_dongles(coder);
-		if (coder->sim->stop || coder->sim->args->num_of_coders == 1)
+		if (get_stop(coder->sim) || coder->sim->args->num_of_coders == 1)
 			break ;
 		pthread_mutex_lock(&coder->state_mutex);
 		coder->last_compile = get_time_ms(coder->sim->start);

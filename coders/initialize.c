@@ -17,7 +17,6 @@ void	init_sim(t_sim *sim, t_args *args)
 	sim->args = args;
 	sim->stop = 0;
 	gettimeofday(&sim->start, NULL);
-	pthread_mutex_init(&sim->stop_mutex, NULL);
 	pthread_mutex_init(&sim->print_mutex, NULL);
 	sim->coders = malloc(sizeof(t_coder) * args->num_of_coders);
 	init_dongles(sim);

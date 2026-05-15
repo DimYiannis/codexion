@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:06:10 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 11:22:15 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/15 08:07:15 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ static int	check_done(t_sim *sim)
 			return (0);
 		i++;
 	}
-	pthread_mutex_lock(&sim->stop_mutex);
+	pthread_mutex_lock(&sim->print_mutex);
 	sim->stop = 1;
-	pthread_mutex_unlock(&sim->stop_mutex);
+	pthread_mutex_unlock(&sim->print_mutex);
 	return (1);
 }
 
@@ -79,7 +79,7 @@ void	*monitor(void *arg)
 	t_sim	*sim;
 
 	sim = (t_sim *)arg;
-	while (!sim->stop)
+	while (!get_stop(sim))
 	{
 		usleep(1000);
 		if (check_burnout(sim))

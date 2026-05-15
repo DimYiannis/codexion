@@ -32,7 +32,7 @@ void	acquire_dongles(t_coder *coder)
 		first = coder->right_dongle;
 		second = coder->left_dongle;
 	}
-	while (!coder->sim->stop)
+	while (!get_stop(coder->sim))
 	{
 		if (!acquire_one(coder, first, 1))
 			return ;
@@ -62,7 +62,7 @@ static int	acquire_one(t_coder *coder, t_dongle *dongle, int blocked)
 {
 	pthread_mutex_lock(&dongle->mutex);
 	sched_add(dongle, coder);
-	while (!coder->sim->stop)
+	while (!get_stop(coder->sim))
 	{
 		if (!dongle->in_use && get_time_ms(coder->sim->start) >= dongle->free_at
 			&& dongle->queue.coders[0] == coder)
@@ -71,7 +71,7 @@ static int	acquire_one(t_coder *coder, t_dongle *dongle, int blocked)
 			break ;
 		pthread_cond_wait(&dongle->cond, &dongle->mutex);
 	}
-	if (!coder->sim->stop && !dongle->in_use
+	if (!get_stop(coder->sim) && !dongle->in_use
 		&& get_time_ms(coder->sim->start) >= dongle->free_at
 		&& dongle->queue.coders[0] == coder)
 	{

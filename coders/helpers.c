@@ -70,3 +70,13 @@ int	min_deadln(t_coder *a, t_coder *b)
 	deadln_b = b->last_compile + b->time_to_burnout;
 	return (deadln_a < deadln_b || (deadln_a == deadln_b && a->id < b->id));
 }
+
+int	get_stop(t_sim *sim)
+{
+	int	stop;
+
+	pthread_mutex_lock(&sim->print_mutex);
+	stop = sim->stop;
+	pthread_mutex_unlock(&sim->print_mutex);
+	return (stop);
+}
