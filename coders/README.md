@@ -74,8 +74,8 @@ Under `fifo`, the queue is a fixed-size circular array; enqueue appends, dequeue
 **State mutex (`coder.state_mutex`)**
 Protects `last_compile` and `compile_count`, which are written by the coder thread and read by the monitor thread. The coder locks, writes, unlocks; the monitor locks, reads, unlocks — ensuring the monitor always sees a fully written value.
 
-**Stop flag + stop mutex (`sim.stop` / `sim.stop_mutex`)**
-A single integer flag signals all threads to halt. The monitor sets it (under `stop_mutex`) on burnout or completion, then broadcasts to all dongle conds. Coder threads check the flag at the top of their loop and inside `acquire_one`. `log_event` checks it inside the print mutex to prevent any output after the stop event.
+**Stop flag (`sim.stop` / `sim.print_mutex`)**
+A single integer flag signals all threads to halt. The monitor sets it under `print_mutex` on burnout or completion, then broadcasts to all dongle conds. Coder threads check the flag via `get_stop()` at the top of their loop and inside `acquire_one`. `log_event` checks it inside the print mutex to prevent any output after the stop event.
 
 **Print mutex (`sim.print_mutex`)**
-Serializes all `printf` calls so log lines are never interleaved. `log_event` acquires it, checks stop, prints if still running, then releases.
+Serializes all `printf` calls so log lines are never interleaved, and also protects the stop flag — `log_event` acquires it, checks stop, prints if still running, then releases.
