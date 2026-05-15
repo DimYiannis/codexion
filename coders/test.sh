@@ -9,6 +9,27 @@ PASS=0
 FAIL=0
 TOTAL=0
 
+# macOS: 'timeout' lives in GNU coreutils as 'gtimeout'; fall back to a bash impl
+if ! command -v timeout &>/dev/null; then
+	if command -v gtimeout &>/dev/null; then
+		timeout() { gtimeout "$@"; }
+	else
+		timeout() {
+			local sec=$1; shift
+			"$@" &
+			local child=$!
+			{ sleep "$sec" && kill "$child" 2>/dev/null; } &
+			local watcher=$!
+			wait "$child" 2>/dev/null
+			local code=$?
+			kill "$watcher" 2>/dev/null
+			wait "$watcher" 2>/dev/null
+			[ "$code" -eq 143 ] && return 124
+			return "$code"
+		}
+	fi
+fi
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

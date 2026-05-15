@@ -63,12 +63,9 @@ void	swap(t_coder **a, t_coder **b)
 
 int	min_deadln(t_coder *a, t_coder *b)
 {
-	long	deadln_a;
-	long	deadln_b;
-
-	deadln_a = a->last_compile + a->time_to_burnout;
-	deadln_b = b->last_compile + b->time_to_burnout;
-	return (deadln_a < deadln_b || (deadln_a == deadln_b && a->id < b->id));
+	if (a->deadline != b->deadline)
+		return (a->deadline < b->deadline);
+	return (a->id < b->id);
 }
 
 int	get_stop(t_sim *sim)

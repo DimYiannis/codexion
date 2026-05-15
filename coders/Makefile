@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -pthread -g
 NAME = codexion
 
 SRC = main.c parser.c helpers.c simulation.c coder.c dongle.c \
-      scheduler.c fifo.c edf.c monitor.c log.c initialize.c
+      acquire.c scheduler.c fifo.c edf.c monitor.c log.c initialize.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

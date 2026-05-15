@@ -58,6 +58,7 @@ typedef struct s_coder
 	t_sim					*sim;
 	int						compile_count;
 	long					last_compile;
+	long					deadline;
 	pthread_t				thread;
 	t_dongle				*left_dongle;
 	t_dongle				*right_dongle;
@@ -104,6 +105,10 @@ int							get_stop(t_sim *sim);
 void						sched_init(t_dongle *dongle, t_sim *sim);
 void						sched_add(t_dongle *dongle, t_coder *coder);
 void						sched_del(t_dongle *dongle, t_coder *coder);
+
+// acquire.c
+int							acquire_pair(t_coder *coder, t_dongle *first,
+								t_dongle *second);
 
 // dongles.c
 void						acquire_dongles(t_coder *coder);

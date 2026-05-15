@@ -12,52 +12,58 @@
 
 #include "header.h"
 
-
-static int wait_and_take(t_coder *coder, t_dongle *first)
+static int	wait_and_take(t_coder *coder, t_dongle *d)
 {
-  pthread_mutex_lock(&first->mutex);
-  while (!get_stop(coder->sim) && (first->in_use || get_time_ms(coder->sim->start) < first->free_at || return_first(&first->queue) != coder))
-    pthread_cond_wait(&first->cond, &first->mutex);
-  if (get_stop(coder->sim))
-  {
-    pthread_mutex_unlock(&first->mutex);
-    return (0);
-  }
-  first->in_use = 1;
-  pthread_mutex_unlock(&first->mutex);
-  return (1);
+	pthread_mutex_lock(&d->mutex);
+	while (!get_stop(coder->sim))
+	{
+		if (!d->in_use
+			&& get_time_ms(coder->sim->start) >= d->free_at
+			&& d->queue.size > 0
+			&& d->queue.coders[0] == coder)
+			break ;
+		pthread_cond_wait(&d->cond, &d->mutex);
+	}
+	if (get_stop(coder->sim))
+	{
+		pthread_mutex_unlock(&d->mutex);
+		return (0);
+	}
+	d->in_use = 1;
+	pthread_mutex_unlock(&d->mutex);
+	return (1);
 }
 
-static int try_second(t_coder *coder, t_dongle *second)
+static void	pop_and_wake(t_coder *coder, t_dongle *d)
 {
-  int ok;
-
-  pthread_mutex_lock(&second->mutex);
-  ok = !second->in_use
-    && get_time_ms(coder->sim->start) >= second->free_at
-    && !get_stop(coder->sim);
-  if (ok)
-    second->in_use = 1;
-  pthread_mutex_unlock(&second->mutex);
-  return (ok);
+	pthread_mutex_lock(&d->mutex);
+	if (d->queue.size > 0 && d->queue.coders[0] == coder)
+		sched_del(d, coder);
+	pthread_cond_broadcast(&d->cond);
+	pthread_mutex_unlock(&d->mutex);
 }
 
-static void release_hold(t_coder *coder, t_dongle *first)
+static void	release_silent(t_coder *coder, t_dongle *d)
 {
-  pthread_mutex_lock(&first->mutex);
-  first->in_use = 0;
-  first->free_at = get_time_ms(coder->sim->start);
-  pthread_cond_broadcast(&first->cond);
-  pthread_mutex_unlock(&first->mutex);
+	pthread_mutex_lock(&d->mutex);
+	d->in_use = 0;
+	d->free_at = get_time_ms(coder->sim->start);
+	pthread_cond_broadcast(&d->cond);
+	pthread_mutex_unlock(&d->mutex);
 }
 
-static void pop_and_wake(t_coder *coder, t_dongle *first)
+static int	enqueue_and_wait(t_coder *coder, t_dongle *d)
 {
-  pthread_mutex_lock(&first->mutex);
-  if(first->queue.size > 0 && first->queue.coders[0] == coder)
-    sched_del(first, coder);
-  pthread_cond_broadcast(&first->cond);
-  pthread_mutex_unlock(&first->mutex);
+	pthread_mutex_lock(&d->mutex);
+	sched_add(d, coder);
+	pthread_mutex_unlock(&d->mutex);
+	if (!wait_and_take(coder, d))
+	{
+		pop_and_wake(coder, d);
+		return (0);
+	}
+	pop_and_wake(coder, d);
+	return (1);
 }
 
 int	acquire_pair(t_coder *coder, t_dongle *first, t_dongle *second)
@@ -68,18 +74,16 @@ int	acquire_pair(t_coder *coder, t_dongle *first, t_dongle *second)
 	pthread_mutex_unlock(&coder->state_mutex);
 	sched_add(first, coder);
 	pthread_mutex_unlock(&first->mutex);
-	while (!get_stop(coder->sim))
+	if (!wait_and_take(coder, first))
 	{
-		if (!wait_and_take(coder, first))
-			break ;
-		if (try_second(coder, second))
-		{
-			pop_and_wake(coder, first);
-			return (1);
-		}
-		release_hold(coder, first);
-		usleep(2000);
+		pop_and_wake(coder, first);
+		return (0);
 	}
 	pop_and_wake(coder, first);
-	return (0);
+	if (!enqueue_and_wait(coder, second))
+	{
+		release_silent(coder, first);
+		return (0);
+	}
+	return (1);
 }
