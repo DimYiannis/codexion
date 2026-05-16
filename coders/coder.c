@@ -31,6 +31,8 @@ void	*routine(void *arg)
 		pthread_mutex_lock(&coder->state_mutex);
 		coder->compile_count++;
 		pthread_mutex_unlock(&coder->state_mutex);
+		if (coder->compile_count >= coder->sim->args->num_of_comps_required)
+			break ;
 		log_event(coder, "is debugging");
 		usleep(coder->sim->args->time_to_debug * 1000);
 		log_event(coder, "is refactoring");

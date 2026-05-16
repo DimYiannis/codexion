@@ -27,21 +27,69 @@ All arguments are mandatory. `scheduler` must be `fifo` or `edf`. All time value
 **Examples:**
 ```bash
 # 5 coders, should never burn out
-./codexion 5 800 200 100 100 10 0 fifo
+./codexion 5 800 200 200 200 5 0 fifo
 
 # Cooldown stress with EDF scheduling
-./codexion 3 1000 200 100 100 5 300 edf
-
-# Single coder (only 1 dongle needed)
-./codexion 1 800 200 100 100 5 0 fifo
+./codexion 3 2000 200 100 100 3 300 edf
 
 # Force burnout — timeout too tight
 ./codexion 4 300 200 100 100 5 200 fifo
-
-./codexion 3 1000 200 100 100 5 300 edf
 ```
 
 **Makefile targets:** `all`, `clean`, `fclean`, `re`
+
+## Test Cases
+
+### Clean run — no burnout
+
+```bash
+./codexion 5 800 200 200 200 5 0 fifo
+```
+
+5 coders with generous timing. All 5 complete 5 compiles; no burnout expected.
+
+### Guaranteed burnout — structural impossibility
+
+```bash
+./codexion 1 800 200 200 200 5 0 fifo
+```
+
+1 coder, 1 dongle on the table — compiling requires 2. Structurally impossible; coder always burns out.
+
+### Cooldown forces burnout
+
+```bash
+./codexion 2 800 200 100 100 5 300 fifo
+```
+
+300 ms cooldown: after coder A compiles, both dongles are locked until t+500 ms. A's next deadline is t+800 ms but the next available slot is t+1000 ms — burnout inevitable.
+
+### EDF vs FIFO — scheduler comparison
+
+```bash
+./codexion 5 800 200 100 100 10 50 edf
+./codexion 5 800 200 100 100 10 50 fifo
+```
+
+Same parameters, different policy. EDF grants contested dongles to the coder closest to burnout; FIFO grants by arrival order. Compare compile distribution across coders between both runs.
+
+### Invalid input — rejected gracefully
+
+```bash
+./codexion 0 800 200 100 100 5 0 fifo    # zero coders
+./codexion 3 800 200 100 100 5 0 random  # invalid scheduler
+./codexion 3 800 abc 100 100 5 0 fifo    # non-integer argument
+```
+
+All three must print an error to stderr and exit non-zero with no simulation output.
+
+### Stress — 50 coders
+
+```bash
+./codexion 50 800 200 100 100 3 0 fifo
+```
+
+50 coders, 3 compiles each. Tests mutex contention, min-heap performance under load, and absence of deadlock at scale.
 
 ## Resources
 
