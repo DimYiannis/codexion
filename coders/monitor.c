@@ -24,6 +24,8 @@ static int	check_burnout(t_sim *sim)
 	{
 		pthread_mutex_lock(&sim->coders[i].state_mutex);
 		last_comp = sim->coders[i].last_compile;
+		if (sim->coders[i].compile_count >= sim->args->num_of_comps_required)
+			last_comp = now;
 		pthread_mutex_unlock(&sim->coders[i].state_mutex);
 		if (now - last_comp > sim->args->time_to_burnout)
 		{
