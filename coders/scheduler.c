@@ -35,3 +35,11 @@ void	sched_del(t_dongle *dongle, t_coder *coder)
 	else
 		heap_pop(&dongle->queue);
 }
+
+void	sched_remove(t_dongle *dongle, t_coder *coder)
+{
+	if (strcmp(coder->sim->args->scheduler, "fifo") == 0)
+		queue_remove(&dongle->queue, coder);
+	else
+		heap_pop(&dongle->queue);
+}
