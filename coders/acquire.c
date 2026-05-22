@@ -43,13 +43,17 @@ static void	pop_and_wake(t_coder *coder, t_dongle *d)
 	pthread_mutex_unlock(&d->mutex);
 }
 
-static void	release_silent(t_coder *coder, t_dongle *d)
+static void	release_silent(t_coder *coder, t_dongle *first, t_dongle *second)
 {
-	pthread_mutex_lock(&d->mutex);
-	d->in_use = 0;
-	d->free_at = get_time_ms(coder->sim->start);
-	pthread_cond_broadcast(&d->cond);
-	pthread_mutex_unlock(&d->mutex);
+	pthread_mutex_lock(&second->mutex);
+	sched_remove(second, coder);
+	pthread_cond_broadcast(&second->cond);
+	pthread_mutex_unlock(&second->mutex);
+	pthread_mutex_lock(&first->mutex);
+	first->in_use = 0;
+	first->free_at = get_time_ms(coder->sim->start);
+	pthread_cond_broadcast(&first->cond);
+	pthread_mutex_unlock(&first->mutex);
 }
 
 static int	enqueue_and_wait(t_coder *coder, t_dongle *d)
@@ -82,7 +86,7 @@ int	acquire_pair(t_coder *coder, t_dongle *first, t_dongle *second)
 	pop_and_wake(coder, first);
 	if (!enqueue_and_wait(coder, second))
 	{
-		release_silent(coder, first);
+		release_silent(coder, first, second);
 		return (0);
 	}
 	return (1);

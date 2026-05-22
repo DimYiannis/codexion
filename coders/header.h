@@ -94,6 +94,8 @@ void						queue_remove(t_queue *queue, t_coder *coder);
 void						init_heap(t_queue *queue, t_sim *sim);
 void						heap_push(t_queue *queue, t_coder *coder);
 t_coder						*heap_pop(t_queue *queue);
+void						heapify_down(t_queue *queue, int size, int i);
+void						heapify_up(t_coder **coders, int index);
 
 // helpers.c
 void						swap(t_coder **a, t_coder **b);
