@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:11:23 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 13:05:48 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/23 18:35:39 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ void	init_heap(t_queue *queue, t_sim *sim)
 {
 	queue->coders = malloc(sizeof(t_coder *) * sim->args->num_of_coders);
 	if (!queue->coders)
-		return ;
+	{
+		fprintf(stderr, "malloc failed\n");
+		exit(1);
+	}
 	queue->size = 0;
 }
 

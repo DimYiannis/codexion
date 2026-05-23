@@ -16,7 +16,10 @@ void	init_queue(t_queue *queue, t_sim *sim)
 {
 	queue->coders = malloc(sizeof(t_coder *) * sim->args->num_of_coders);
 	if (!queue->coders)
-		return ;
+	{
+		fprintf(stderr, "malloc failed\n");
+		exit(1);
+	}
 	queue->size = 0;
 }
 

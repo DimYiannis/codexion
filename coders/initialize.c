@@ -19,6 +19,11 @@ void	init_sim(t_sim *sim, t_args *args)
 	gettimeofday(&sim->start, NULL);
 	pthread_mutex_init(&sim->print_mutex, NULL);
 	sim->coders = malloc(sizeof(t_coder) * args->num_of_coders);
+	if (!sim->coders)
+	{
+		fprintf(stderr, "malloc failed\n");
+		exit(1);
+	}
 	init_dongles(sim);
 }
 
@@ -49,6 +54,11 @@ void	init_dongles(t_sim *sim)
 	int	i;
 
 	sim->dongles = malloc(sizeof(t_dongle) * sim->args->num_of_coders);
+	if (!sim->dongles)
+	{
+		fprintf(stderr, "malloc failed\n");
+		exit(1);
+	}
 	i = 0;
 	while (i < sim->args->num_of_coders)
 	{
