@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 10:07:17 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 11:22:26 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/25 11:13:35 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,3 @@ void	sched_del(t_dongle *dongle, t_coder *coder)
 	else
 		heap_pop(&dongle->queue);
 }
-

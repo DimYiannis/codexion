@@ -6,7 +6,7 @@
 /*   By: ydimitra <ydimitra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 10:11:20 by ydimitra          #+#    #+#             */
-/*   Updated: 2026/05/13 11:21:17 by ydimitra         ###   ########.fr       */
+/*   Updated: 2026/05/25 11:13:43 by ydimitra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,3 @@ t_coder	*dequeue(t_queue *queue)
 	queue->size--;
 	return (first);
 }
-
