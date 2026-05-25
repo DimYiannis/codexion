@@ -67,8 +67,8 @@ All arguments are mandatory. `scheduler` must be `fifo` or `edf`. All time value
 ### EDF vs FIFO — scheduler comparison
 
 ```bash
-./codexion 5 800 200 100 100 10 50 edf
-./codexion 5 800 200 100 100 10 50 fifo
+./codexion 5 800 200 100 100 5 50 edf
+./codexion 5 800 200 100 100 5 50 fifo
 ```
 
 Same parameters, different policy. EDF grants contested dongles to the coder closest to burnout; FIFO grants by arrival order. Compare compile distribution across coders between both runs.
