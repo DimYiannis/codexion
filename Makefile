@@ -2,17 +2,18 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -g
 
 NAME = codexion
+SRCDIR = coders
 
 SRC = main.c parser.c helpers.c simulation.c coder.c dongle.c \
       acquire.c scheduler.c fifo.c edf.c monitor.c log.c initialize.c
-OBJ = $(SRC:.c=.o)
+OBJ = $(addprefix $(SRCDIR)/, $(SRC:.c=.o))
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o: %.c header.h
+$(SRCDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/header.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
