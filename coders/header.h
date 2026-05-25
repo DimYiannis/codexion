@@ -88,7 +88,6 @@ void						*monitor(void *arg);
 void						init_queue(t_queue *queue, t_sim *sim);
 void						enqueue(t_queue *queue, t_coder *coder);
 t_coder						*dequeue(t_queue *queue);
-void						queue_remove(t_queue *queue, t_coder *coder);
 
 // edf.c
 void						init_heap(t_queue *queue, t_sim *sim);
@@ -108,7 +107,6 @@ int							get_stop(t_sim *sim);
 void						sched_init(t_dongle *dongle, t_sim *sim);
 void						sched_add(t_dongle *dongle, t_coder *coder);
 void						sched_del(t_dongle *dongle, t_coder *coder);
-void						sched_remove(t_dongle *dongle, t_coder *coder);
 
 // acquire.c
 int							acquire_pair(t_coder *coder, t_dongle *first,

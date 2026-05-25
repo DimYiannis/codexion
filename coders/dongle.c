@@ -71,8 +71,8 @@ void	release_dongles(t_coder *coder)
 		release_one(coder, coder->left_dongle);
 		return ;
 	}
-	release_one(coder, coder->left_dongle);
 	release_one(coder, coder->right_dongle);
+	release_one(coder, coder->left_dongle);
 }
 
 void	cleanup_dongles(t_sim *sim)
