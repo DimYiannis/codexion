@@ -68,9 +68,8 @@ void	swap(t_coder **a, t_coder **b)
 
 int	min_deadln(t_coder *a, t_coder *b)
 {
-	if (a->deadline != b->deadline)
+	
 		return (a->deadline < b->deadline);
-	return (a->id < b->id);
 }
 
 int	get_stop(t_sim *sim)
